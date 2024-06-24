@@ -15,6 +15,7 @@ import argparse
 
 from models.cnn_base import CNN
 from models.resnet import ResNet
+from models.densenet import DenseNet
 
 supported_models = [
     'cnn_base',
@@ -23,11 +24,15 @@ supported_models = [
     'resnet50',
     'resnet101',
     'resnet152',
+    'densenet121',
+    'densenet169',
+    'densenet201',
+    'densenet161',
 ]
 
 # Parse command line arguments
 parser = argparse.ArgumentParser(description='Train a model on CIFAR10')
-parser.add_argument('--model', type=str, default='resnet50', choices=supported_models, help='which model to use')
+parser.add_argument('--model', type=str, default='resnet18', choices=supported_models, help='which model to use')
 args = parser.parse_args()
 
 # Configuration
@@ -69,8 +74,16 @@ elif args.model == 'resnet101':
     model = ResNet(num=101, num_classes=len(classes)).to(device)
 elif args.model == 'resnet152':
     model = ResNet(num=152, num_classes=len(classes)).to(device)
+elif args.model == 'densenet121':
+    model = DenseNet(num=121, num_classes=len(classes)).to(device)
+elif args.model == 'densenet169':
+    model = DenseNet(num=169, num_classes=len(classes)).to(device)
+elif args.model == 'densenet201':
+    model = DenseNet(num=201, num_classes=len(classes)).to(device)
+elif args.model == 'densenet161':
+    model = DenseNet(num=161, num_classes=len(classes)).to(device)
 else:
-    model = ResNet(num=50, num_classes=len(classes)).to(device)
+    raise NotImplementedError
 
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
