@@ -1,5 +1,5 @@
 """
-main script
+Main Script
 """
 
 from models.RNN_Model import RNN
@@ -24,7 +24,7 @@ if torch.cuda.is_available():
     device = 'cuda'
 elif torch.backends.mps.is_available():
     device = 'mps'
-print(f'device: {device}')
+print('device: {}'.format(device))
 
 # Data Loading & Preprocessing
 dataset = NameDataset(DATA_PATH)

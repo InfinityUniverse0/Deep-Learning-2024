@@ -24,6 +24,7 @@ class Trainer:
         self.criterion = criterion
         self.optimizer = optimizer
         self.device = device
+        self.model.to(device)
 
     def train(self, train_loader, valid_loader, num_epochs):
         """
@@ -124,7 +125,7 @@ class Trainer:
         conf_mat = confusion_matrix(all_labels, all_preds)
 
         if verbose:
-            print(f'Test Loss: {test_loss:.4f}, Test Accuracy: {test_accuracy:.4f}')
+            print('Test Loss: {:.4f}, Test Accuracy: {:.4f}'.format(test_loss, test_accuracy))
             print('Confusion Matrix:')
             print(conf_mat)
 
