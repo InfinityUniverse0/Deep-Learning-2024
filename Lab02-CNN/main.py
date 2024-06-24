@@ -16,6 +16,7 @@ import argparse
 from models.cnn_base import CNN
 from models.resnet import ResNet
 from models.densenet import DenseNet
+from models.mobilenet import MobileNet
 
 supported_models = [
     'cnn_base',
@@ -28,6 +29,7 @@ supported_models = [
     'densenet169',
     'densenet201',
     'densenet161',
+    'mobilenet'
 ]
 
 # Parse command line arguments
@@ -82,6 +84,8 @@ elif args.model == 'densenet201':
     model = DenseNet(num=201, num_classes=len(classes)).to(device)
 elif args.model == 'densenet161':
     model = DenseNet(num=161, num_classes=len(classes)).to(device)
+elif args.model == 'mobilenet':
+    model = MobileNet(num_classes=len(classes)).to(device)
 else:
     raise NotImplementedError
 
