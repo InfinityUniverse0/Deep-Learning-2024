@@ -2,7 +2,6 @@
 Main Script
 """
 
-from models.RNN_Model import RNN
 from preprocessing import NameDataset, collate_fn
 from trainer import Trainer
 from visualization import plot_loss_accuracy, plot_confusion_matrix
@@ -12,12 +11,24 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 from torch.utils.data import random_split
 import os
+import argparse
+
+supported_models = [
+    'rnn',
+    'lstm'
+]
+
+# Parse command line arguments
+parser = argparse.ArgumentParser(description='Train RNN Model on Name-Language Classification')
+parser.add_argument('--model', type=str, default='lstm', choices=supported_models, help='which model to use')
+args = parser.parse_args()
+
 
 # Configuration
 DATA_PATH = './data/names'
 TRAIN_PROP = 0.8
 BATCH_SIZE = 64
-SAVE_PATH = 'results/RNN'
+SAVE_PATH = os.path.join('results', args.model)
 
 device = 'cpu'
 if torch.cuda.is_available():
@@ -39,7 +50,15 @@ input_size = len(dataset.all_letters)
 hidden_size = 128
 num_layers = 1
 num_classes = len(dataset.all_categories)
-model = RNN(input_size, hidden_size, num_layers, num_classes).to(device)
+
+if args.model == 'rnn':
+    from models.RNN_Model import RNN as Model
+elif args.model == 'lstm':
+    from models.LSTM_Model import LSTM as Model
+else:
+    raise NotImplementedError
+
+model = Model(input_size, hidden_size, num_layers, num_classes).to(device)
 print(model)
 
 # Training Scheduler
