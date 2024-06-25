@@ -9,7 +9,7 @@ import torch.optim as optim
 import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
-from utils import train, generate, plot_loss
+from utils import train, generate, plot_loss, plot_D_output
 import argparse
 
 from models.gan import Generator, Discriminator
@@ -61,8 +61,8 @@ print(discriminator)
 print(generator)
 
 # Training
-num_epochs = 50
-loss_D_list, loss_G_list = train(
+num_epochs = 10
+loss_D_list, loss_G_list, D_x_list, D_G_z_list = train(
     discriminator, generator, data_loader, num_epochs, device, optimizer_D, optimizer_G, criterion,
     gen_img=True, save_path=SAVE_PATH
 )
@@ -76,3 +76,4 @@ print('GAN Model Saved')
 
 # Visualization
 plot_loss(loss_D_list, loss_G_list, save_path=SAVE_PATH)
+plot_D_output(D_x_list, D_G_z_list, save_path=SAVE_PATH)
