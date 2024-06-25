@@ -12,10 +12,9 @@ from torch.utils.data import DataLoader
 from utils import train, generate, plot_loss, plot_D_output
 import argparse
 
-from models.gan import Generator, Discriminator
-
 supported_models = [
     'gan',
+    'cnn_gan'
 ]
 
 # Parse command line arguments
@@ -47,12 +46,16 @@ dataset = datasets.FashionMNIST(root=DATA_PATH, train=True, download=True, trans
 data_loader = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=True)
 
 # Model & Optimization
+latent_dim = 100
 if args.model == 'gan':
-    latent_dim = 100
-    generator = Generator(latent_dim=latent_dim, output_shape=INPUT_SHAPE).to(device)
-    discriminator = Discriminator(INPUT_SHAPE).to(device)
+    from models.gan import Generator, Discriminator
+elif args.model == 'cnn_gan':
+    from models.cnn_gan import Generator, Discriminator
 else:
     raise NotImplementedError
+
+generator = Generator(latent_dim=latent_dim, output_shape=INPUT_SHAPE).to(device)
+discriminator = Discriminator(INPUT_SHAPE).to(device)
 
 criterion = nn.BCELoss()
 optimizer_D = optim.Adam(discriminator.parameters(), lr=0.0002, betas=(0.5, 0.999))
@@ -61,7 +64,7 @@ print(discriminator)
 print(generator)
 
 # Training
-num_epochs = 50
+num_epochs = 20
 loss_D_list, loss_G_list, D_x_list, D_G_z_list = train(
     discriminator, generator, data_loader, num_epochs, device, optimizer_D, optimizer_G, criterion,
     gen_img=True, save_path=SAVE_PATH
