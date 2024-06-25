@@ -85,6 +85,7 @@ def train(
         end_time = time.time()  # End Time
         elapsed_time = end_time - start_time  # Elapsed Time
         loss_D /= total_num
+        loss_D /= 2  # because we have two losses for real and fake
         loss_G /= total_num
         D_x /= total_num
         D_G_z /= total_num

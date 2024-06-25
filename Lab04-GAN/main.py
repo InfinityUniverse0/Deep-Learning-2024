@@ -61,7 +61,7 @@ print(discriminator)
 print(generator)
 
 # Training
-num_epochs = 10
+num_epochs = 50
 loss_D_list, loss_G_list, D_x_list, D_G_z_list = train(
     discriminator, generator, data_loader, num_epochs, device, optimizer_D, optimizer_G, criterion,
     gen_img=True, save_path=SAVE_PATH
