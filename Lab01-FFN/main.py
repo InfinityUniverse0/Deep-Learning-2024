@@ -15,10 +15,12 @@ import argparse
 
 from models.mlp_base import MLPBase
 from models.mlp import MLP
+from models.mlp_mixer import MLPMixer
 
 supported_models = [
     'mlp_base',
     'mlp',
+    'mlp_mixer'
 ]
 
 # Parse command line arguments
@@ -30,6 +32,11 @@ args = parser.parse_args()
 DATA_PATH = 'data'
 BATCH_SIZE = 64
 SAVE_PATH = os.path.join('results', args.model)
+
+# Configuration for MLP-Mixer
+PATCH_SIZE = 7
+NUM_PATCHES = 16
+HIDDEN_DIM = 256
 
 device = 'cpu'
 if torch.cuda.is_available():
@@ -56,6 +63,10 @@ if args.model == 'mlp_base':
     model = MLPBase(input_shape=(28, 28), num_classes=len(classes))
 elif args.model == 'mlp':
     model = MLP(input_shape=(28, 28), num_classes=len(classes))
+elif args.model == 'mlp_mixer':
+    model = MLPMixer(
+        in_channels=1, patch_size=PATCH_SIZE, num_patches=NUM_PATCHES, hidden_dim=HIDDEN_DIM, num_classes=len(classes)
+    )
 else:
     raise NotImplementedError
 
