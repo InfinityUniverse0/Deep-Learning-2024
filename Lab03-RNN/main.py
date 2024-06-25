@@ -15,7 +15,8 @@ import argparse
 
 supported_models = [
     'rnn',
-    'lstm'
+    'lstm',
+    'my_lstm'
 ]
 
 # Parse command line arguments
@@ -29,6 +30,9 @@ DATA_PATH = './data/names'
 TRAIN_PROP = 0.8
 BATCH_SIZE = 64
 SAVE_PATH = os.path.join('results', args.model)
+
+if args.model == 'my_lstm':
+    BATCH_SIZE = 1
 
 device = 'cpu'
 if torch.cuda.is_available():
@@ -55,6 +59,8 @@ if args.model == 'rnn':
     from models.RNN_Model import RNN as Model
 elif args.model == 'lstm':
     from models.LSTM_Model import LSTM as Model
+elif args.model == 'my_lstm':
+    from models.MyLSTM import LSTM as Model
 else:
     raise NotImplementedError
 
